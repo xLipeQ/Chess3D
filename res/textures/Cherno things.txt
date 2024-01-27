@@ -1,0 +1,44 @@
+
+	float positions[] =
+	{//  COORDINATES     /    COLORS	/	/ TexCoord	/
+		-2.5f, -2.f,	0.0f, 0.0f, 0.83f,   0.0f, 0.0f, // 0
+		2.5f, -2.f,	1.0f, 0.0f, 0.83f,   0.0f, 1.0f, // 1
+		2.5f, -2.f,	1.0f, 1.0f, 0.83f,   1.0f, 1.0f, // 2
+		-2.5f, -2.f,	0.0f, 1.0f, 0.83f,   1.0f, 0.0f, // 3
+	};
+
+	uint indices[] =
+	{
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	VertexArray* VA = new VertexArray();
+	VertexBufferLayout* VBL = new VertexBufferLayout();
+	VertexBuffer* VB = new VertexBuffer(positions, 4 * 8 * sizeof(float));
+
+	// positions
+	VBL->Push<float>(2);
+	// colors
+	VBL->Push<float>(3);
+	// texcords
+	VBL->Push<float>(2);
+	VA->AddBuffer(*VB, *VBL);
+
+	IndexBuffer* IB = new IndexBuffer(indices, sizeof(indices) / sizeof(uint));
+
+	VA->UnBind();
+	shader.UnBind();
+	VB->UnBind();
+	IB->UnBind();
+
+
+		shader.Bind();
+		camera->Matrix(45.0f, 0.1f, 100.0f, shader, "u_camMatrix");
+
+		VA->Bind();
+		IB->Bind();
+		chessboardtexture->Bind();
+		shader.SetUniform1i("u_Texture", 0);
+
+		//renderer.Draw(*VA, *IB, shader);
